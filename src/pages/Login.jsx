@@ -16,7 +16,7 @@ const Login = () => {
   const handleOnChange = (e) => {
     const { name, value } = e.target;
     setFormData((prev) => ({ ...prev, [name]: value }));
-  };
+  }; 
   const handleValiditon = () => {
     const { email, password } = formData;
     if (!email && !password) {

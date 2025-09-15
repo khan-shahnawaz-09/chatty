@@ -4,6 +4,7 @@ import { axiosInstance } from "../lib/axiosInstance";
 
 const useAuthStore = create((set) => ({
   user: null,
+  onlineUsers: [],
   //for loading
   isSigning: false,
   isCheckingAuth: true,

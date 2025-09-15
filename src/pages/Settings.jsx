@@ -1,5 +1,5 @@
 import React from "react";
-import { THEMES } from "../components/constant";
+import { THEMES } from "../constant";
 import useThemeStore from "../store/ThemeStore";
 import { Send } from "lucide-react";
 const PREVIEW_MESSAGES = [
