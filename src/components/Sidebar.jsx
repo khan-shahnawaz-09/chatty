@@ -1,6 +1,6 @@
-import React, { use, useEffect } from "react";
+import React, { useEffect, useState } from "react";
 import { useMessageStore } from "../store/MessageStore";
-import { Users } from "lucide-react";
+import { Flag, Users } from "lucide-react";
 import SidebarSkeleton from "./Skeletons/SidebarSkeleton";
 import useAuthStore from "../store/authStore";
 
@@ -8,11 +8,14 @@ const Sidebar = () => {
   const { users, getUsers, isUserLoading, selectedUser, setSelectedUser } =
     useMessageStore();
   const { onlineUsers } = useAuthStore();
+  const [showOnlineOnly, setShowOnlineOnly] = useState(false);
   //run filtering logic
   useEffect(() => {
     getUsers();
   }, [getUsers]);
-
+  const filterOnlineUsers = showOnlineOnly
+    ? users.filter((user) => onlineUsers.includes(user._id))
+    : users;
   if (isUserLoading) {
     return <SidebarSkeleton />;
   }
@@ -23,8 +26,7 @@ const Sidebar = () => {
           <Users className="size-6" />
           <span className="font-medium hidden lg:block">Contacts</span>
         </div>
-        {/* TODO: Online filter toggle */}
-        {/* <div className="mt-3 hidden lg:flex items-center gap-2">
+        <div className="mt-3 hidden lg:flex items-center gap-2">
           <label className="cursor-pointer flex items-center gap-2">
             <input
               type="checkbox"
@@ -37,11 +39,11 @@ const Sidebar = () => {
           <span className="text-xs text-zinc-500">
             ({onlineUsers.length - 1} online)
           </span>
-        </div>*/}
+        </div>
       </div>
 
       <div className="overflow-y-auto w-full py-3">
-        {users.map((user) => (
+        {filterOnlineUsers.map((user) => (
           <button
             key={user._id}
             onClick={() => setSelectedUser(user)}

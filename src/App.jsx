@@ -6,7 +6,8 @@ import useAuthStore from "./store/authStore";
 import useThemeStore from "./store/ThemeStore";
 import { Loader } from "lucide-react";
 const App = () => {
-  const { checkAuth, isCheckingAuth } = useAuthStore();
+  const { onlineUsers, checkAuth, isCheckingAuth } = useAuthStore();
+  console.log("login users",onlineUsers);
   const { theme } = useThemeStore();
   //this function checking for the user that authorized or not even if after referecing the page
   useEffect(() => {

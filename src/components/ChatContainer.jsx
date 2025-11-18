@@ -7,22 +7,34 @@ import useAuthStore from "../store/authStore";
 import { formatMessageTime } from "../lib/utils";
 
 const ChatContainer = () => {
-  const { isMessageLoading, getMessage, selectedUser, messages } =
-    useMessageStore();
-  //   //for auto scroll
-  // const messageEndRef = React.useRef(null);
-  // const scrollToBottom = () => {
-  //   if (messageEndRef.current) {
-  //     messageEndRef.current.scrollIntoView({ behavior: "smooth" });
-  //   }
-  // };
+  const {
+    isMessageLoading,
+    getMessage,
+    selectedUser,
+    messages,
+    subscribeToMessage,
+    unsubscribeToMessage,
+  } = useMessageStore();
   const { user: authUser } = useAuthStore();
+
+  //for auto scroll
+  const messageEndRef = React.useRef(null);
+  const scrollToBottom = () => {
+    if (messageEndRef.current) {
+      messageEndRef.current.scrollIntoView({ behavior: "smooth" });
+    }
+  };
+  useEffect(() => {
+    scrollToBottom();
+  }, [messages]);
   //call get message when selected user changed
   useEffect(() => {
     if (selectedUser) {
       getMessage(selectedUser._id);
+      subscribeToMessage();
+      return () => unsubscribeToMessage();
     }
-  }, [selectedUser, getMessage]);
+  }, [selectedUser, getMessage, subscribeToMessage, unsubscribeToMessage]);
   if (isMessageLoading) {
     return (
       <div className="flex-1 flex flex-col overflow-auto">
@@ -44,6 +56,7 @@ const ChatContainer = () => {
             className={`chat ${
               message.senderId === authUser._id ? "chat-end" : "chat-start"
             }`}
+            ref={messageEndRef}
           >
             <div className=" chat-image avatar">
               <div className="size-10 rounded-full border">
